@@ -6,7 +6,6 @@ import java.io.File;
 import java.io.IOException;
 import java.net.MalformedURLException;
 import java.net.URL;
-
 import javax.imageio.ImageIO;
 
 /**
@@ -23,11 +22,9 @@ public class Utils {
   /**
    * Create a new instance of a Picture object of the specified width and
    * height, using the RGB colour model.
-   * 
-   * @param width
-   *          width of new Picture
-   * @param height
-   *          height of new Picture
+   *
+   * @param width width of new Picture
+   * @param height height of new Picture
    * @return a new instance of a Picture object of the specified size.
    */
   public static Picture createPicture(int width, int height) {
@@ -39,12 +36,11 @@ public class Utils {
   /**
    * Create a Picture object from the the image at the specified location (URL
    * or local file).
-   * 
-   * @param location
-   *          a String representing the location of the image to be loaded. This
-   *          can either be a URL, or a filesystem location.
+   *
+   * @param location a String representing the location of the image to be
+   * loaded. This can either be a URL, or a filesystem location.
    * @return a Picture representing the image at the specified URL, or null if
-   *         loading failed for any reason.
+   * loading failed for any reason.
    */
   public static Picture loadPicture(String locationString) {
 
@@ -70,11 +66,11 @@ public class Utils {
       } else {
         return null;
       }
-      
+
       if (origImage == null) {
         return null;
       }
-      
+
     } catch (IOException e) {
       return null;
     }
@@ -82,7 +78,8 @@ public class Utils {
     // If image loaded, then create a BufferedImage which is modifiable
     int imageWidth = origImage.getWidth(null);
     int imageHeight = origImage.getHeight(null);
-    img = new BufferedImage(imageWidth, imageHeight, BufferedImage.TYPE_INT_RGB);
+    img = new BufferedImage(imageWidth, imageHeight,
+        BufferedImage.TYPE_INT_RGB);
     Graphics g = img.createGraphics();
     g.drawImage(origImage, 0, 0, null);
     return new Picture(img);
@@ -90,9 +87,8 @@ public class Utils {
 
   /**
    * Returns a String representation of the RGB components of the picture.
-   * 
-   * @param picture
-   *          the picture to convert to a String
+   *
+   * @param picture the picture to convert to a String
    * @return a String representation of the specified Picture
    */
   public static String toArray(Picture picture) {
@@ -117,11 +113,9 @@ public class Utils {
 
   /**
    * Saves the given picture in png format in the given destination.
-   * 
-   * @param picture
-   *          the picture to save to disk
-   * @param destination
-   *          where to save the picture
+   *
+   * @param picture the picture to save to disk
+   * @param destination where to save the picture
    * @return true iff the file was saved successfully
    */
   public static boolean savePicture(Picture picture, String destination) {
