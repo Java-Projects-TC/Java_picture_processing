@@ -4,11 +4,9 @@ import static junit.framework.Assert.assertEquals;
 import static testsuite.TestSuiteHelper.runMain;
 
 import java.io.IOException;
-
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.TemporaryFolder;
-
 import picture.Utils;
 
 public class TestSuite {
@@ -23,9 +21,21 @@ public class TestSuite {
   }
 
   @Test
+  public void invertRainbow() throws IOException {
+    assertEquals(Utils.loadPicture("images/rainbowI64x64doc.png"),runMain
+        (tmpFolder, "invert", "images/rainbow64x64doc.png"));
+  }
+
+  @Test
   public void grayscaleBlack() throws IOException {
     assertEquals(Utils.loadPicture("images/black64x64.png"),
         runMain(tmpFolder, "grayscale", "images/black64x64.png"));
+  }
+
+  @Test
+  public void grayscaleRainbow() throws IOException {
+    assertEquals(Utils.loadPicture("images/rainbowGS64x64doc.png"),
+        runMain(tmpFolder, "grayscale", "images/rainbow64x64doc.png"));
   }
 
   @Test

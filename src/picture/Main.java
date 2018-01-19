@@ -47,15 +47,24 @@ public class Main {
           Utils.savePicture(process.getPicture(), args[3]);
           break;
         case "blend":
-          process = new Process(Utils.loadPicture(args[1]));
+          process = new Process();
+          Picture[] pics = new Picture[args.length - 2];
+          for (int i = 1; i < args.length - 1; i++) {
+            pics[i - 1] = Utils.loadPicture(args[i]);
+          }
+          process.blend(pics);
+          Utils.savePicture(process.getPicture(),args[args.length - 1]);
           break;
         case "blur":
           process = new Process(Utils.loadPicture(args[1]));
+          process.blur();
+          Utils.savePicture(process.getPicture(), args[2]);
           break;
-        default:
+        default :
+          System.out.println("Invalid arguments");
           break;
       }
     }
-    System.err.println("TODO: Finish implementing main");
   }
+
 }

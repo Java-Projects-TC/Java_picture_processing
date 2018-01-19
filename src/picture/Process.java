@@ -1,5 +1,8 @@
 package picture;
 
+import java.util.Arrays;
+import java.util.Comparator;
+
 public class Process {
 
   //fields
@@ -9,6 +12,9 @@ public class Process {
   // Constructor
   public Process(Picture inputPicture) {
     this.picture = inputPicture;
+  }
+
+  public Process() {
   }
 
   // Methods
@@ -42,7 +48,7 @@ public class Process {
     }
   }
 
-  public void rotate90(){
+  public void rotate90() {
     Picture newPic = Utils.createPicture(this.picture
         .getHeight(), this.picture.getWidth());
     for (int y = 0; y < this.picture.getHeight(); y++) {
@@ -55,20 +61,20 @@ public class Process {
     this.picture = newPic;
   }
 
-  public void flipV(){
+  public void flipV() {
 
     Picture newPic = Utils.createPicture(this.picture.getWidth(), this.picture
         .getHeight());
     for (int y = 0; y < this.picture.getHeight(); y++) {
       for (int x = 0; x < this.picture.getWidth(); x++) {
         Color colour = this.picture.getPixel(x, y);
-        newPic.setPixel(x,(this.picture.getHeight() - 1) - y, colour);
+        newPic.setPixel(x, (this.picture.getHeight() - 1) - y, colour);
       }
     }
     this.picture = newPic;
   }
 
-  public void flipH(){
+  public void flipH() {
     Picture newPic = Utils.createPicture(this.picture.getWidth(), this.picture
         .getHeight());
     for (int y = 0; y < this.picture.getHeight(); y++) {
@@ -81,11 +87,65 @@ public class Process {
     this.picture = newPic;
   }
 
-  public void blend(){
+  public void blend(Picture[] pics) {
 
+    // Tried to calculate min height and width using streams as it seemed
+    // more elegant.
+
+    int minWidth = Arrays.asList(pics).stream().min(Comparator.comparing
+        (Picture::getWidth)).get().getWidth();
+
+    int minHeight = Arrays.asList(pics).stream().min(Comparator.comparing
+        (Picture::getHeight)).get().getHeight();
+
+    Picture newPic = Utils.createPicture(minWidth, minHeight);
+
+    for (int y = 0; y < minHeight; y++) {
+      for (int x = 0; x < minWidth; x++) {
+        int avgR = 0, avgG = 0, avgB = 0;
+        for (Picture pic : pics) {
+          avgR += pic.getPixel(x, y).getRed();
+          avgG += pic.getPixel(x, y).getGreen();
+          avgB += pic.getPixel(x, y).getBlue();
+        }
+        avgR = avgR / (pics.length);
+        avgG = avgG / (pics.length);
+        avgB = avgB / (pics.length);
+
+        Color colour = new Color(avgR, avgG, avgB);
+        newPic.setPixel(x, y, colour);
+      }
+    }
+    this.picture = newPic;
   }
 
   public void blur() {
+    Picture newPic = Utils.createPicture(this.picture.getWidth(), this.picture
+        .getHeight());
 
+    for (int y = 0; y < this.picture.getHeight(); y++) {
+      for (int x = 0; x < this.picture.getWidth(); x++) {
+        if (x == 0 || y == 0 || x == this.picture.getWidth() - 1 || y == this
+            .picture.getHeight() - 1) {
+          newPic.setPixel(x, y, this.picture.getPixel(x, y));
+        } else {
+          int avgR = 0, avgG = 0, avgB = 0;
+          for (int i = -1; i < 2; i++) {
+            for (int j = -1; j < 2; j++) {
+              avgR += this.picture.getPixel(x + i, y + j).getRed();
+              avgG += this.picture.getPixel(x + i, y + j).getGreen();
+              avgB += this.picture.getPixel(x + i, y + j).getBlue();
+            }
+          }
+          avgR = avgR / 9;
+          avgG = avgG / 9;
+          avgB = avgB / 9;
+          Color colour = new Color(avgR, avgG, avgB);
+
+          newPic.setPixel(x, y, colour);
+        }
+      }
+    }
+    this.picture = newPic;
   }
 }
