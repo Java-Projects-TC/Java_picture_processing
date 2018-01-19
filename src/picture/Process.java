@@ -7,6 +7,9 @@ public class Process {
 
   //fields
   private picture.Picture picture;
+  private final int MAX_PIXEL_VAL = 255;
+  private final int NUM_COLOUR_ARGS = 3;
+  private final int NUM_PIXELS_3_BY_3 = 9;
   //TODO: NO MAGIC NUMBERS
 
   // Constructor
@@ -29,9 +32,9 @@ public class Process {
     // use picture.setpixel
     for (int y = 0; y < this.picture.getHeight(); y++) {
       for (int x = 0; x < this.picture.getWidth(); x++) {
-        Color colour = new Color(255 - this.picture.getPixel(x, y).getRed(),
-            255 - this.picture.getPixel(x, y).getGreen(),
-            255 - this.picture.getPixel(x, y).getBlue());
+        Color colour = new Color(MAX_PIXEL_VAL - this.picture.getPixel(x, y).getRed(),
+            MAX_PIXEL_VAL - this.picture.getPixel(x, y).getGreen(),
+            MAX_PIXEL_VAL - this.picture.getPixel(x, y).getBlue());
         this.picture.setPixel(x, y, colour);
       }
     }
@@ -41,7 +44,8 @@ public class Process {
     for (int y = 0; y < this.picture.getHeight(); y++) {
       for (int x = 0; x < this.picture.getWidth(); x++) {
         int avg = (this.picture.getPixel(x, y).getRed() + this.picture.getPixel
-            (x, y).getGreen() + this.picture.getPixel(x, y).getBlue()) / 3;
+            (x, y).getGreen() + this.picture.getPixel(x, y).getBlue()) /
+            NUM_COLOUR_ARGS;
         Color colour = new Color(avg, avg, avg);
         this.picture.setPixel(x, y, colour);
       }
@@ -53,9 +57,8 @@ public class Process {
         .getHeight(), this.picture.getWidth());
     for (int y = 0; y < this.picture.getHeight(); y++) {
       for (int x = 0; x < this.picture.getWidth(); x++) {
-        Color colour = this.picture.getPixel(y, (this.picture.getWidth() - 1)
-            - x);
-        newPic.setPixel(x, y, colour);
+        Color colour = this.picture.getPixel(x, y);
+        newPic.setPixel(this.picture.getHeight() - 1 - y,x , colour);
       }
     }
     this.picture = newPic;
@@ -80,8 +83,7 @@ public class Process {
     for (int y = 0; y < this.picture.getHeight(); y++) {
       for (int x = 0; x < this.picture.getWidth(); x++) {
         Color colour = this.picture.getPixel(x, y);
-
-        newPic.setPixel((this.picture.getHeight() - 1) - x, y, colour);
+        newPic.setPixel((this.picture.getWidth() - 1) - x, y, colour);
       }
     }
     this.picture = newPic;
@@ -92,10 +94,10 @@ public class Process {
     // Tried to calculate min height and width using streams as it seemed
     // more elegant.
 
-    int minWidth = Arrays.asList(pics).stream().min(Comparator.comparing
+    int minWidth = Arrays.stream(pics).min(Comparator.comparing
         (Picture::getWidth)).get().getWidth();
 
-    int minHeight = Arrays.asList(pics).stream().min(Comparator.comparing
+    int minHeight = Arrays.stream(pics).min(Comparator.comparing
         (Picture::getHeight)).get().getHeight();
 
     Picture newPic = Utils.createPicture(minWidth, minHeight);
@@ -130,16 +132,16 @@ public class Process {
           newPic.setPixel(x, y, this.picture.getPixel(x, y));
         } else {
           int avgR = 0, avgG = 0, avgB = 0;
-          for (int i = -1; i < 2; i++) {
-            for (int j = -1; j < 2; j++) {
+          for (int i = -1; i <= 1; i++) {
+            for (int j = -1; j <= 1; j++) {
               avgR += this.picture.getPixel(x + i, y + j).getRed();
               avgG += this.picture.getPixel(x + i, y + j).getGreen();
               avgB += this.picture.getPixel(x + i, y + j).getBlue();
             }
           }
-          avgR = avgR / 9;
-          avgG = avgG / 9;
-          avgB = avgB / 9;
+          avgR = avgR / NUM_PIXELS_3_BY_3;
+          avgG = avgG / NUM_PIXELS_3_BY_3;
+          avgB = avgB / NUM_PIXELS_3_BY_3;
           Color colour = new Color(avgR, avgG, avgB);
 
           newPic.setPixel(x, y, colour);

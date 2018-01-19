@@ -45,9 +45,37 @@ public class TestSuite {
   }
 
   @Test
+  public void rotate90Blue() throws IOException {
+    assertEquals(Utils.loadPicture("images/blueR9064x32doc.png"),
+        runMain(tmpFolder, "rotate", "90", "images/blue64x32doc.png"));
+  }
+
+  @Test
+  public void rotate180Blue() throws IOException {
+    assertEquals(Utils.loadPicture("images/blueR18064x32doc.png"),
+        runMain(tmpFolder, "rotate", "180", "images/blue64x32doc.png"));
+  }
+
+  @Test
+  public void rotate270Blue() throws IOException {
+    assertEquals(Utils.loadPicture("images/blueR27064x32doc.png"),
+        runMain(tmpFolder, "rotate", "270", "images/blue64x32doc.png"));
+  }
+
+  @Test
   public void flipVGreen() throws IOException {
     assertEquals(Utils.loadPicture("images/green64x64FVdoc.png"),
         runMain(tmpFolder, "flip", "V", "images/green64x64doc.png"));
+  }
+  @Test
+  public void flipVBlue() throws IOException {
+    assertEquals(Utils.loadPicture("images/blueFV64x32doc.png"),
+        runMain(tmpFolder, "flip", "V", "images/blue64x32doc.png"));
+  }
+  @Test
+  public void flipHBlue() throws IOException {
+    assertEquals(Utils.loadPicture("images/blueFH64x32doc.png"),
+        runMain(tmpFolder, "flip", "H", "images/blue64x32doc.png"));
   }
 
   @Test
@@ -57,10 +85,24 @@ public class TestSuite {
   }
 
   @Test
+  public void blurSunset() throws IOException {
+    assertEquals(Utils.loadPicture("images/sunsetBlur64x32.png"),
+        runMain(tmpFolder, "blur", "images/sunset64x32.png"));
+  }
+
+  @Test
   public void blendBWAndRainbow() throws IOException {
     assertEquals(
         Utils.loadPicture("images/rainbowpatternsblend64x64.png"),
         runMain(tmpFolder, "blend", "images/bwpatterns64x64.png",
+            "images/rainbow64x64doc.png"));
+  }
+
+  @Test
+  public void blendSunsetAndRainbow() throws IOException {
+    assertEquals(
+        Utils.loadPicture("images/rainbowsunsetBlend.png"),
+        runMain(tmpFolder, "blend", "images/sunset64x32.png",
             "images/rainbow64x64doc.png"));
   }
 
